@@ -1,6 +1,22 @@
+using System.Runtime.CompilerServices;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+var connectionString = app.Configuration.GetConnectionString("DefaultConnection");
+var secrets = new Secrets();
+app.Configuration.GetSection("Secrets").Bind(secrets);
+app.MapGet("/", () => new
+{
+    ConnectionString = connectionString,
+    Secrets = secrets
+});
 
 app.Run();
+
+public class Secrets
+{
+    public string JwtTokenSecret { get; set; }
+    public string PrivateKey { get; set; }
+    public string ApiKey { get; set; }
+}

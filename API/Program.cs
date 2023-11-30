@@ -9,7 +9,8 @@ app.Configuration.GetSection("Secrets").Bind(secrets);
 app.MapGet("/", () => new
 {
     ConnectionString = connectionString,
-    Secrets = secrets
+    Secrets = secrets,
+    ApiUrl = app.Configuration.GetValue<string>("ApiUrl")
 });
 
 app.Run();
